@@ -59,9 +59,8 @@ package bimip;
   Features:
   * Binary protocol for compact payloads
   * Device awareness (multi-device presence tracking)
-  * Scalable routing using ETS + GenServers
-  * Cluster-ready (node interconnection via RPC or gRPC)
-  * Extensible message schema for offers, candidates, and custom events
+  * Scalable routing using elixir OTP
+  * Cluster-ready (node interconnection via RPC)
 
   ------------------------------------------------------
   Message Stanzas
