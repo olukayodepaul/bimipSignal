@@ -63,23 +63,24 @@ Below is the current BIMIP protocol schema:
 syntax = "proto3";
 
 package bimip;
-
-// ---------------- Identity ----------------
+````
+````proto
 message Identity {
     string eid = 1;                              // User’s global identifier (e.g., account ID or JID)
     optional string connection_resource_id = 2;  // Identifier for a specific device or session instance
     string node = 3;                             // System node handling this entity (cluster context)
 }
+````
 
-// ---------------- Media ----------------
+````proto
 message Media {
     string type = 1;        // "image" | "video" | "audio" | "file"
     string url = 2;         // URL of the media
     string thumbnail = 3;   // Thumbnail URL (optional)
     int64 size = 4;         // Size in bytes
 }
-
-// ---------------- Signal ----------------
+````
+````proto
 message Signal {
     string id = 1;
     Identity from = 2;
