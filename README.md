@@ -21,12 +21,6 @@ Together, they form a **robust communication layer** that ensures:
 
 ---
 
-Would you like me to add the next section —
-
-### 🌐 Architecture Overview — explaining how **BimipServer**, **BimipSignal**, and **ESM** interact?
-
----
-
 ## 🚀 Vision
 
 > “To create a universal, binary-based communication interface that connects millions of devices efficiently and securely.”
