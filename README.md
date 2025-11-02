@@ -288,19 +288,6 @@ message MessageScheme {
 
 ---
 
-## 🧭 Documentation
-
-Comprehensive documentation can be found in the [`docs/`](./docs) directory:
-
-* [Overview](./docs/1-overview.md)
-* [Architecture](./docs/2-architecture.md)
-* [Protocol Specification](./docs/3-protocol-spec.md)
-* [Message Flow](./docs/4-message-flow.md)
-* [Setup Guide](./docs/5-setup.md)
-* [Use Cases](./docs/6-use-cases.md)
-* [Glossary](./docs/glossary.md)
-
----
 
 ## 📄 License
 
