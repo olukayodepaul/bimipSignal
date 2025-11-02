@@ -40,30 +40,97 @@ BIMIP (Binary Interface for Messaging and Internet Protocol) provides an open fr
 
 ---
 
-## ⚙️ Example Message
 
-```elixir
-%BimipServer.AwarenessVisibilityRes{
-  id: "1",
-  eid: "a@domain.com",
-  device_id: "aaaaa1",
-  type: 1,
-  timestamp: 1761831141324,
-  status: 0,
-  message: "Visibility updated successfully",
-  display_name: "Kunle Tomitope"
+
+````markdown
+## 🧩 Protocol Definition
+
+BIMIP uses **Protocol Buffers (proto3)** as its core serialization format.  
+The `.proto` specification defines all communication stanzas — from messages and awareness signals to authentication and session control.
+
+Below is the current BIMIP protocol schema:
+
+```proto
+syntax = "proto3";
+
+package bimip;
+
+// ---------------- Identity ----------------
+message Identity {
+    string eid = 1;                              // User’s global identifier (e.g., account ID or JID)
+    optional string connection_resource_id = 2;  // Identifier for a specific device or session instance
+    string node = 3;                             // System node handling this entity (cluster context)
 }
+
+// ---------------- Media ----------------
+message Media {
+    string type = 1;        // "image" | "video" | "audio" | "file"
+    string url = 2;         // URL of the media
+    string thumbnail = 3;   // Thumbnail URL (optional)
+    int64 size = 4;         // Size in bytes
+}
+
+// ---------------- Signal ----------------
+message Signal {
+    string id = 1;
+    Identity from = 2;
+    Identity to = 3;
+    int32 type = 4;       // 1=REQUEST, 2=RESPONSE, 3=ERROR
+    int32 status = 5;     // 6=TYPING, 7=RECORDING, 8=FORWARDED, etc.
+    int64 timestamp = 6;
+    int64 monotonic_id = 7;
+}
+
+// ---------------- Payload ----------------
+message Payload {
+    map<string, string> data = 1;
+    repeated Media media = 2;
+}
+
+// ---------------- Message ----------------
+message Message {
+    string id = 1;
+    string from = 2;
+    string to = 3;
+    string type = 4;
+    int64 timestamp = 5;
+    Payload payload = 6;
+    Ack ack = 7;
+    Metadata metadata = 8;
+}
+
+// ---------------- Awareness ----------------
+message Awareness {
+    string id = 1;
+    Identity from = 2;
+    Identity to = 3;
+    int32 type = 4;
+    int32 status = 5;
+    int64 timestamp = 6;
+}
+
+// ... (other stanzas like Ack, ErrorMessage, TokenAuthority, etc.)
 ````
+
+> 💡 **Note:**
+> BIMIP stanzas are intentionally modular — you can extend the protocol to include custom message types such as **Offers**, **Candidates**, or **System Events** while maintaining binary compatibility.
 
 ---
 
-## 🔌 Features
+If you’d like, I can now create a **short documentation summary table** (like a protocol index) describing each stanza and its purpose, for example:
 
-* **Binary protocol** for compact payloads
-* **Device awareness** (multi-device presence tracking)
-* **Scalable routing** using ETS + GenServers
-* **Cluster-ready** (node interconnection via RPC or gRPC)
-* **Extensible message schema** for offers, candidates, and custom events
+| **Message Type** | **Purpose**                                                                  |
+| ---------------- | ---------------------------------------------------------------------------- |
+| `Identity`       | Defines user and device identity within a cluster.                           |
+| `Signal`         | Handles transient actions like typing, recording, or delivery notifications. |
+| `Awareness`      | Communicates real-time presence and activity.                                |
+| `Message`        | Represents chat or system notifications.                                     |
+| `TokenAuthority` | Manages token refresh, revocation, or validation.                            |
+| `Logout`         | Performs device or session logout.                                           |
+| `ErrorMessage`   | Provides structured error responses.                                         |
+
+Would you like me to add this **protocol index table** next?
+
 
 ---
 
