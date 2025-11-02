@@ -3,16 +3,28 @@
 
 **BIMIP** is a scalable real-time communication protocol built for developers who need reliable, low-latency connectivity across devices, users, and distributed systems.
 
-It is designed for massive-scale chat, presence awareness, media streaming, and real-time collaboration.
-BIMIP combines binary efficiency with a distributed architecture powered by the BEAM (Erlang/Elixir) runtime.
+It is designed for **massive-scale chat**, **location streaming**, **push notifications**, **chat message awareness**, **media streaming**, and **real-time collaboration** — all powered by a **binary, event-driven architecture** that maximizes performance and efficiency.
 
-At its core, BIMIP is composed of two main services:
+Built on the **BEAM (Erlang/Elixir)** runtime, BIMIP delivers **fault tolerance**, **massive concurrency**, and **distributed scalability** out of the box — making it ideal for mission-critical, always-connected applications.
 
-BimipSignal — handles client connections, signaling, and message serialization/deserialization.
+At its core, **BIMIP** is composed of two main services:
 
-BimipServer — serves as the authoritative backend where contact lists are managed (add, delete, block), tokens are signed, and inter-device coordination is enforced.
+* **BimipSignal** — Handles **BimipClient** connections, signaling, and message serialization/deserialization.
+* **BimipServer** — Serves as the **authoritative control plane** where contact lists are managed (add, delete, block), tokens are signed, and inter-device coordination is enforced.
 
-Together, they form a robust communication layer that ensures high performance, reliability, and extensibility across multiple devices and sessions.
+Together, they form a **robust communication layer** that ensures:
+
+* ⚡ **High throughput** for millions of concurrent sessions
+* 🚀 **Low-latency routing** across nodes and regions
+* 🧭 **Persistent awareness** of user and device presence
+* 🔄 **Seamless synchronization** between multiple connected devices
+
+---
+
+Would you like me to add the next section —
+
+### 🌐 Architecture Overview — explaining how **BimipServer**, **BimipSignal**, and **ESM** interact?
+
 ---
 
 ## 🚀 Vision
