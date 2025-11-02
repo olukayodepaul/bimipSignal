@@ -255,24 +255,26 @@ message MessageScheme {
 
 ## 🧱 Protocol Index
 
-| **Message Type**      | **Purpose**                                                                                        |
-| --------------------- | -------------------------------------------------------------------------------------------------- |
-| `Identity`            | Defines user and device identity within a cluster, including node and session context.             |
-| `Media`               | Describes attached media (image, video, audio, or file) with optional thumbnail and metadata.      |
-| `Signal`              | Handles transient actions such as typing, recording, forwarding, delivered, or read notifications. |
-| `Payload`             | Encapsulates message content and metadata, including optional media attachments.                   |
-| `Metadata`            | Provides encryption and signature for message integrity and confidentiality.                       |
-| `Ack`                 | Tracks acknowledgment states (SENT, DELIVERED, READ, FORWARDED, PLAYED).                           |
-| `Awareness`           | Communicates real-time presence, device activity, and location sharing.                            |
-| `Message`             | Represents chat messages or system notifications with acknowledgment tracking.                     |
-| `ErrorMessage`        | Defines structured error responses with standardized codes and details.                            |
-| `PingPong`            | Maintains heartbeat (PING ↔ PONG) between clients and servers.                                     |
-| `Contact`             | Manages relationships and subscription actions (add, remove, accept, deny, etc.).                  |
-| `AwarenessVisibility` | Toggles user visibility state (ENABLED, DISABLED, or ERROR).                                       |
-| `TokenAuthority`      | Manages token operations (REQUEST, REFRESH, VALIDATE, or REVOKE).                                  |
-| `Logout`              | Performs device or session logout with status reporting.                                           |
-| `Body`                | Container for batching multiple stanzas (supports Awareness lists).                                |
-| `MessageScheme`       | Unified wrapper for all stanza types ensuring one payload per transport message.                   |
+| **Message Type**       | **Purpose**                                                                                          |
+| ----------------------- | ---------------------------------------------------------------------------------------------------- |
+| `Identity`              | Defines user and device identity within a cluster, including node and session context.               |
+| `Media`                 | Describes attached media (image, video, audio, or file) with optional thumbnail and metadata.        |
+| `Signal`                | Handles transient actions such as typing, recording, forwarding, delivered, or read notifications.   |
+| `Payload`               | Encapsulates message content and metadata, including optional media attachments.                     |
+| `Metadata`              | Provides encryption and signature for message integrity and confidentiality.                         |
+| `Ack`                   | Tracks acknowledgment states (SENT, DELIVERED, READ, FORWARDED, PLAYED).                             |
+| `Awareness`             | Communicates real-time presence, device activity, and location sharing.                              |
+| `Message`               | Represents chat messages or system notifications with acknowledgment tracking.                       |
+| `PushNotification`      | Delivers push messages to devices, supporting offline and background notification delivery.           |
+| `ErrorMessage`          | Defines structured error responses with standardized codes and details.                              |
+| `PingPong`              | Maintains heartbeat (PING ↔ PONG) between clients and servers.                                       |
+| `Contact`               | Manages relationships and subscription actions (add, remove, accept, deny, etc.).                    |
+| `AwarenessVisibility`   | Toggles user visibility state (ENABLED, DISABLED, or ERROR).                                         |
+| `TokenAuthority`        | Manages token operations (REQUEST, REFRESH, VALIDATE, or REVOKE).                                    |
+| `LocationStream`        | Streams real-time geolocation updates including latitude, longitude, and optional altitude data.      |
+| `Logout`                | Performs device or session logout with status reporting.                                             |
+| `Body`                  | Container for batching multiple stanzas (supports Awareness lists).                                  |
+| `MessageScheme`         | Unified wrapper for all stanza types ensuring one payload per transport message.                     |
 
 ---
 
