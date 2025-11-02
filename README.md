@@ -1,76 +1,80 @@
 
 # 🛰️ BIMIP — Binary Interface for Messaging and Internet Protocol
 
-**BIMIP** is a scalable real-time communication protocol built for developers who need reliable, low-latency connectivity across devices, users, and distributed systems.
+**BIMIP** is a scalable real-time communication protocol built for developers who need **reliable**, **low-latency** connectivity across devices, users, and distributed systems.
 
 It is designed for **massive-scale chat**, **location streaming**, **push notifications**, **chat message awareness**, **media streaming**, and **real-time collaboration** — all powered by a **binary, event-driven architecture** that maximizes performance and efficiency.
 
-Built on the **BEAM (Erlang/Elixir)** runtime, BIMIP delivers **fault tolerance**, **massive concurrency**, and **distributed scalability** out of the box — making it ideal for mission-critical, always-connected applications.
+Built on the **BEAM (Erlang/Elixir)** runtime, BIMIP provides **fault tolerance**, **massive concurrency**, and **distributed scalability** out of the box — making it ideal for **mission-critical, always-connected systems**.
 
-At its core, **BIMIP** is composed of two main services:
+At its core, **BIMIP** is composed of two primary services:
 
-- **BimipSignal** — Handles **BimipClient** connections, signaling, and message serialization/deserialization.  
-- **BimipServer** — Serves as the **authoritative control plane**, where contact lists are managed (add, delete, block), tokens are signed, and inter-device coordination is enforced.
+* **BimipSignal** — Handles `BimipClient` connections, signaling, and message serialization/deserialization.
+* **BimipServer** — Serves as the **authoritative control plane** for identity, token management, contact coordination, and inter-device routing.
 
-Together, they form a **robust communication layer** that ensures:
+Together, they form a **robust, distributed communication layer** that ensures:
 
-- ⚡ **High throughput** for millions of concurrent sessions  
-- 🚀 **Low-latency routing** across nodes and regions  
-- 🧭 **Persistent awareness** of user and device presence  
-- 🔄 **Seamless synchronization** between multiple connected devices  
+* ⚡ **High throughput** for millions of concurrent sessions
+* 🚀 **Low-latency routing** across nodes and regions
+* 🧭 **Persistent awareness** of user and device presence
+* 🔄 **Seamless synchronization** between multiple connected devices
 
 ---
 
 ## 🧩 Core Components
 
-| **Component**                     | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **BimipServer**                   | Core router managing sessions, message routing, and awareness events.                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **BimipSignal**                   | Handles **BimipClient** connections, signaling, and message serialization/deserialization.                                                                                                                                                                                                                                                                                                                                                                                             |
-| **Epokhai Session Manager (ESM)** | Manages and coordinates device communication across nodes.                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| **Orchestrator**                  | Supervises and coordinates distributed node clusters for scalability and fault tolerance.                                                                                                                                                                                                                                                                                                                                                                                              |
-| **Registry**                      | Tracks connected **EIDs** and **device IDs** across clusters using the **BIMIP Internal Presence Protocol (BIPP)**.                                                                                                                                                                                                                                                                                                                                                                    |
-| **Storage**                       | The **BimipQueue** is a high-performance, file-backed log system responsible for persisting messages, acknowledgments, and device states.<br><br>Built on advanced principles of **sparse indexing**, **write-ahead logging**, and **segmented file design**, it supports fast append operations, offline data persistence, and efficient purging of old segments.<br><br>This design ensures scalability for millions of messages while maintaining low latency and minimal disk I/O. |
+| **Component**                     | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **BimipServer**                   | Core router responsible for managing sessions, message routing, and device awareness events across clusters.                                                                                                                                                                                                                                                                                                                                        |
+| **BimipSignal**                   | Handles client-side signaling, message serialization, and event propagation for connected `BimipClient` instances.                                                                                                                                                                                                                                                                                                                                  |
+| **Epokhai Session Manager (ESM)** | Coordinates and manages device communication across distributed nodes, maintaining per-device awareness and state.                                                                                                                                                                                                                                                                                                                                  |
+| **Orchestrator**                  | Supervises and coordinates node clusters for scalability, recovery, and load balancing.                                                                                                                                                                                                                                                                                                                                                             |
+| **Registry**                      | Tracks connected **EIDs** and **device IDs** across clusters using the **BIMIP Internal Presence Protocol (BIPP)** for real-time visibility.                                                                                                                                                                                                                                                                                                        |
+| **Storage / BimipQueue**          | High-performance file-backed log system for persisting messages, acknowledgments, and device states.<br><br>Implements **sparse indexing**, **write-ahead logging**, and **segmented file design**, supporting ultra-fast append operations, offline persistence, and efficient cleanup of expired segments.<br><br>This guarantees **millions of messages** can be stored and processed efficiently with **minimal disk I/O** and **low latency**. |
 
 ---
 
 ## ✨ Features
 
-- **Binary Protocol** — Compact, efficient payloads optimized for low-latency communication  
-- **Device Awareness** — Real-time multi-device presence tracking across sessions  
-- **Scalable Routing** — High-performance message routing using ETS and GenServers  
-- **Cluster-Ready Architecture** — Supports node interconnection via RPC or gRPC for distributed scalability  
-- **Extensible Message Schema** — Flexible structure for offers, ICE candidates, and custom event types  
+* **Binary Protocol** — Compact, efficient payloads optimized for low-latency communication
+* **Device Awareness** — Real-time, multi-device presence tracking
+* **Scalable Routing** — High-performance routing using ETS and GenServers
+* **Cluster-Ready Architecture** — Supports node interconnection via RPC or gRPC for distributed scalability
+* **Extensible Message Schema** — Flexible structure for offers, ICE candidates, and custom event types
 
 ---
 
+## 📜 Protocol Specification
+
+```proto
 syntax = "proto3";
 
 package bimip;
 
+/*
   ======================================================
   Bimip — Binary Interface for Messaging and Internet Protocol
   ======================================================
 
   Features:
-  * **Binary protocol** for compact payloads
-  * **Device awareness** (multi-device presence tracking)
-  * **Scalable routing** using ETS + GenServers
-  * **Cluster-ready** (node interconnection via RPC or gRPC)
-  * **Extensible message schema** for offers, candidates, and custom events
+  * Binary protocol for compact payloads
+  * Device awareness (multi-device presence tracking)
+  * Scalable routing using ETS + GenServers
+  * Cluster-ready (node interconnection via RPC or gRPC)
+  * Extensible message schema for offers, candidates, and custom events
 
   ------------------------------------------------------
   Message Stanzas
   ------------------------------------------------------
-  | **Message Type** | **Purpose**                                                                  |
-  | ---------------- | ---------------------------------------------------------------------------- |
-  | `Identity`       | Defines user and device identity within a cluster.                           |
-  | `Signal`         | Handles transient actions like typing, recording, or delivery notifications. |
-  | `Awareness`      | Communicates real-time presence and activity.                                |
-  | `Message`        | Represents chat or system notifications.                                     |
-  | `TokenAuthority` | Manages token refresh, revocation, or validation.                            |
-  | `Logout`         | Performs device or session logout.                                           |
-  | `ErrorMessage`   | Provides structured error responses.                                         |
+  | Message Type     | Purpose                                                                 |
+  | ---------------- | ----------------------------------------------------------------------- |
+  | Identity         | Defines user and device identity within a cluster.                      |
+  | Signal           | Handles transient actions (typing, recording, delivery notifications).   |
+  | Awareness        | Communicates real-time presence and activity.                            |
+  | Message          | Represents chat or system notifications.                                 |
+  | TokenAuthority   | Manages token refresh, revocation, or validation.                        |
+  | Logout           | Performs device or session logout.                                       |
+  | ErrorMessage     | Provides structured error responses.                                     |
 */
 
 // ---------------- Identity ----------------
@@ -90,13 +94,13 @@ message Media {
 
 // ---------------- Signal ----------------
 message Signal {
-    string id = 1;                      // Unique signal ID (UUID or correlation reference)
-    Identity from = 2;                  // Source entity
-    Identity to = 3;                    // Target entity
-    int32 type = 4;                     // 1=REQUEST, 2=RESPONSE, 3=ERROR
-    int32 status = 5;                   // 1=TYPING, 2=RECORDING, 3=FORWARDED, 4=DELIVERED, 5=READ, 6=RESUME
-    int64 timestamp = 6;                // Epoch milliseconds
-    int64 monotonic_id = 7;             // Derived sequence number from message queue
+    string id = 1;
+    Identity from = 2;
+    Identity to = 3;
+    int32 type = 4;         // 1=REQUEST, 2=RESPONSE, 3=ERROR
+    int32 status = 5;       // 1=TYPING, 2=RECORDING, 3=FORWARDED, 4=DELIVERED, 5=READ, 6=RESUME
+    int64 timestamp = 6;
+    int64 monotonic_id = 7; // Derived from message queue sequence
 }
 
 // ---------------- Payload ----------------
@@ -107,13 +111,13 @@ message Payload {
 
 // ---------------- Metadata ----------------
 message Metadata {
-    string encrypted = 1;    // Base64 encrypted content
-    string signature = 2;    // Base64 signature for integrity
+    string encrypted = 1;   // Base64 encrypted content
+    string signature = 2;   // Base64 signature for integrity
 }
 
 // ---------------- Ack ----------------
 message Ack {
-    repeated int32 status = 1; // 9=DELIVERED, 10=READ, 11=FORWARDED, 12=SENT, 13=PLAYED/VIEWED
+    repeated int32 status = 1;  // 9=DELIVERED, 10=READ, 11=FORWARDED, 12=SENT, 13=PLAYED
 }
 
 // ---------------- Awareness ----------------
@@ -121,9 +125,9 @@ message Awareness {
     string id = 1;
     Identity from = 2;
     Identity to = 3;
-    int32 type = 4;                 
-    int32 status = 5;               
-    int32 location_sharing = 6;     
+    int32 type = 4;
+    int32 status = 5;
+    int32 location_sharing = 6;
     double latitude = 7;
     double longitude = 8;
     int32 ttl = 9;
@@ -158,10 +162,10 @@ message PushNotification {
 
 // ---------------- ErrorMessage ----------------
 message ErrorMessage {
-    int32 code = 1;           // e.g., 400=Bad Request, 401=Unauthorized
-    int32 error_origin = 2;   // e.g., 1=CLIENT, 2=SERVER, 3=NETWORK
-    string details = 3;       // Human-readable description
-    int64 timestamp = 4;      // Error occurrence timestamp
+    int32 code = 1;
+    int32 error_origin = 2;
+    string details = 3;
+    int64 timestamp = 4;
 }
 
 // ---------------- PingPong ----------------
@@ -198,7 +202,7 @@ message TokenAuthority {
     Identity to = 1;
     string token = 2;
     int32 type = 3;        // 1=REFRESH, 2=VALIDATE, 3=REVOKE
-    int32 task = 4;        // Specific action to perform
+    int32 task = 4;
     int64 timestamp = 5;
     string details = 6;
 }
@@ -217,8 +221,8 @@ message LocationStream {
 // ---------------- Logout ----------------
 message Logout {
     Identity to = 1;
-    int32 type = 2;         // 1=DEVICE, 2=SESSION, 3=ACCOUNT
-    int32 status = 3;       // 0=INITIATED, 1=SUCCESS, 2=FAILED
+    int32 type = 2;       // 1=DEVICE, 2=SESSION, 3=ACCOUNT
+    int32 status = 3;     // 0=INITIATED, 1=SUCCESS, 2=FAILED
     int64 timestamp = 4;
     string details = 5;
 }
@@ -248,37 +252,36 @@ message MessageScheme {
         Signal signal = 12;
     }
 }
-````
+```
 
 ---
 
 ## 🧱 Protocol Index
 
-| **Message Type**          | **Purpose**                                                                                                     |
-|----------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `Identity`                | Defines user and device identity within a cluster, including node association and session context.              |
-| `Media`                   | Describes attached media (image, video, audio, or file) with optional thumbnail and metadata.                   |
-| `Signal`                  | Handles transient events like typing, recording, forwarded, delivered, read, and resume notifications.          |
-| `Payload`                 | Encapsulates message data and key-value attributes, including optional media attachments.                       |
-| `Metadata`                | Provides encryption and signature fields for message integrity and confidentiality.                             |
-| `Ack`                     | Tracks acknowledgment states (SENT, DELIVERED, READ, FORWARDED, PLAYED) for reliable delivery.                  |
-| `Awareness`               | Communicates real-time presence, device activity, and location sharing with TTL-based expiration.               |
-| `Message`                 | Represents chat messages or notifications with payload, metadata, and acknowledgment tracking.                  |
-| `ErrorMessage`            | Defines structured error responses with standardized codes and contextual details.                              |
-| `PingPong`                | Maintains connection heartbeat between client and server (PING ↔ PONG).                                         |
-| `Contact`                 | Manages contact relationships and subscription actions (add, remove, accept, deny, etc.).                       |
-| `AwarenessVisibility`     | Toggles and synchronizes user awareness visibility state (ENABLED, DISABLED, or ERROR).                         |
-| `TokenAuthority`          | Manages token operations such as REQUEST, RESULT, REFRESH, or REVOKE between nodes or clients.                  |
-| `Logout`                  | Performs device or session logout with status reporting (SUCCESS, FAIL, PENDING).                              |
-| `Body`                    | Container for batching multiple stanzas (currently supports Awareness lists).                                   |
-| `MessageScheme`           | Unified wrapper for all stanza types, ensuring only one payload type per transport message.                     |
-
+| **Message Type**      | **Purpose**                                                                                        |
+| --------------------- | -------------------------------------------------------------------------------------------------- |
+| `Identity`            | Defines user and device identity within a cluster, including node and session context.             |
+| `Media`               | Describes attached media (image, video, audio, or file) with optional thumbnail and metadata.      |
+| `Signal`              | Handles transient actions such as typing, recording, forwarding, delivered, or read notifications. |
+| `Payload`             | Encapsulates message content and metadata, including optional media attachments.                   |
+| `Metadata`            | Provides encryption and signature for message integrity and confidentiality.                       |
+| `Ack`                 | Tracks acknowledgment states (SENT, DELIVERED, READ, FORWARDED, PLAYED).                           |
+| `Awareness`           | Communicates real-time presence, device activity, and location sharing.                            |
+| `Message`             | Represents chat messages or system notifications with acknowledgment tracking.                     |
+| `ErrorMessage`        | Defines structured error responses with standardized codes and details.                            |
+| `PingPong`            | Maintains heartbeat (PING ↔ PONG) between clients and servers.                                     |
+| `Contact`             | Manages relationships and subscription actions (add, remove, accept, deny, etc.).                  |
+| `AwarenessVisibility` | Toggles user visibility state (ENABLED, DISABLED, or ERROR).                                       |
+| `TokenAuthority`      | Manages token operations (REQUEST, REFRESH, VALIDATE, or REVOKE).                                  |
+| `Logout`              | Performs device or session logout with status reporting.                                           |
+| `Body`                | Container for batching multiple stanzas (supports Awareness lists).                                |
+| `MessageScheme`       | Unified wrapper for all stanza types ensuring one payload per transport message.                   |
 
 ---
 
 ## 🧠 Ideal Use Cases
 
-* Real-time messaging apps
+* Real-time chat or collaboration apps
 * Video/audio call signaling
 * IoT device coordination
 * Distributed event streaming
@@ -288,7 +291,7 @@ message MessageScheme {
 
 ## 🧭 Documentation
 
-All details about architecture, protocol design, and setup are in the [`docs/`](./docs) directory:
+Comprehensive documentation can be found in the [`docs/`](./docs) directory:
 
 * [Overview](./docs/1-overview.md)
 * [Architecture](./docs/2-architecture.md)
@@ -311,8 +314,5 @@ Released under the [MIT License](./LICENSE)
 **Paul Aigokhai Olukayode**
 Full Stack Software Engineer • Architect of BIMIP
 📧 [paul.olukayode.pro@gmail.com](mailto:paul.olukayode.pro@gmail.com)
-🌐 [GitHub](https://github.com/olukayodepaul) | [LinkedIn](https://linkedin.com/in/paulaigbokhaiolukayode)
-
-
-
+🌐 [GitHub](https://github.com/olukayodepaul) • [LinkedIn](https://linkedin.com/in/paulaigbokhaiolukayode)
 
