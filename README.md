@@ -21,8 +21,8 @@ BIMIP (Binary Interface for Messaging and Internet Protocol) provides an open fr
 | Component | Description |
 |------------|-------------|
 | **BimipServer** | Core router managing sessions, routing, and awareness events |
-| **BimipSignal** | Handles WebSocket signaling and message serialization |
-| **Orchestrator** | Manages distributed node coordination and routing between nodes |
+| **BimipSignal** | Handles **BimipClient** connections, signaling, and message serialization/deserialization |
+| **Orchestrator** | Epokhai session mannager (ESM) Manages and cordinate device communication |
 | **Registry** | Tracks connected JIDs and device IDs using ETS |
 | **Storage** | Persists message logs, acknowledgments, and device state |
 
