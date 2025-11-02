@@ -89,14 +89,16 @@ message Signal {
     int64 timestamp = 6;
     int64 monotonic_id = 7;
 }
-
+````
+````proto
 // ---------------- Payload ----------------
 message Payload {
     map<string, string> data = 1;
     repeated Media media = 2;
 }
+````
+````proto
 
-// ---------------- Message ----------------
 message Message {
     string id = 1;
     string from = 2;
@@ -107,8 +109,9 @@ message Message {
     Ack ack = 7;
     Metadata metadata = 8;
 }
+````
 
-// ---------------- Awareness ----------------
+````proto
 message Awareness {
     string id = 1;
     Identity from = 2;
@@ -117,12 +120,7 @@ message Awareness {
     int32 status = 5;
     int64 timestamp = 6;
 }
-
-// ... (other stanzas like Ack, ErrorMessage, TokenAuthority, etc.)
 ````
-
-> 💡 **Note:**
-> BIMIP stanzas are intentionally modular — you can extend the protocol to include custom message types such as **Offers**, **Candidates**, or **System Events** while maintaining binary compatibility.
 
 ---
 
