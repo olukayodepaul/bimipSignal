@@ -40,9 +40,6 @@ BIMIP (Binary Interface for Messaging and Internet Protocol) provides an open fr
 
 ---
 
-
-
-````markdown
 ## 🧩 Protocol Definition
 
 BIMIP uses **Protocol Buffers (proto3)** as its core serialization format.  
