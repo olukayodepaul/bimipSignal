@@ -44,73 +44,209 @@ Together, they form a **robust communication layer** that ensures:
 
 ---
 
-## 🧩 Protocol Definition
-
-BIMIP uses **Protocol Buffers (proto3)** as its core serialization format.  
-The `.proto` specification defines all communication stanzas — from messages and awareness signals to authentication and session control.
-
-Below is the current BIMIP protocol schema:
-
-```proto
 syntax = "proto3";
 
 package bimip;
-````
-````proto
-message Identity {
-    string eid = 1;    
-    optional string connection_resource_id = 2; 
-    string node = 3;
-}
-````
 
-````proto
-message Media {
-    string type = 1;  
-    string url = 2; 
-    string thumbnail = 3;
-    int64 size = 4;  
+  ======================================================
+  Bimip — Binary Interface for Messaging and Internet Protocol
+  ======================================================
+
+  Features:
+  * **Binary protocol** for compact payloads
+  * **Device awareness** (multi-device presence tracking)
+  * **Scalable routing** using ETS + GenServers
+  * **Cluster-ready** (node interconnection via RPC or gRPC)
+  * **Extensible message schema** for offers, candidates, and custom events
+
+  ------------------------------------------------------
+  Message Stanzas
+  ------------------------------------------------------
+  | **Message Type** | **Purpose**                                                                  |
+  | ---------------- | ---------------------------------------------------------------------------- |
+  | `Identity`       | Defines user and device identity within a cluster.                           |
+  | `Signal`         | Handles transient actions like typing, recording, or delivery notifications. |
+  | `Awareness`      | Communicates real-time presence and activity.                                |
+  | `Message`        | Represents chat or system notifications.                                     |
+  | `TokenAuthority` | Manages token refresh, revocation, or validation.                            |
+  | `Logout`         | Performs device or session logout.                                           |
+  | `ErrorMessage`   | Provides structured error responses.                                         |
+*/
+
+// ---------------- Identity ----------------
+message Identity {
+    string eid = 1;                              // User’s global identifier (e.g., account ID or JID)
+    optional string connection_resource_id = 2;  // Identifier for a specific device/session
+    string node = 3;                             // Node handling this entity (cluster context)
 }
-````
-````proto
+
+// ---------------- Media ----------------
+message Media {
+    string type = 1;        // "image" | "video" | "audio" | "file"
+    string url = 2;         // Media URL
+    string thumbnail = 3;   // Optional thumbnail
+    int64 size = 4;         // Size in bytes
+}
+
+// ---------------- Signal ----------------
 message Signal {
+    string id = 1;                      // Unique signal ID (UUID or correlation reference)
+    Identity from = 2;                  // Source entity
+    Identity to = 3;                    // Target entity
+    int32 type = 4;                     // 1=REQUEST, 2=RESPONSE, 3=ERROR
+    int32 status = 5;                   // 1=TYPING, 2=RECORDING, 3=FORWARDED, 4=DELIVERED, 5=READ, 6=RESUME
+    int64 timestamp = 6;                // Epoch milliseconds
+    int64 monotonic_id = 7;             // Derived sequence number from message queue
+}
+
+// ---------------- Payload ----------------
+message Payload {
+    map<string, string> data = 1;   // Dynamic key-value data
+    repeated Media media = 2;       // Optional media attachments
+}
+
+// ---------------- Metadata ----------------
+message Metadata {
+    string encrypted = 1;    // Base64 encrypted content
+    string signature = 2;    // Base64 signature for integrity
+}
+
+// ---------------- Ack ----------------
+message Ack {
+    repeated int32 status = 1; // 9=DELIVERED, 10=READ, 11=FORWARDED, 12=SENT, 13=PLAYED/VIEWED
+}
+
+// ---------------- Awareness ----------------
+message Awareness {
     string id = 1;
     Identity from = 2;
     Identity to = 3;
-    int32 type = 4;
-    int32 status = 5;
-    int64 timestamp = 6;
-    int64 monotonic_id = 7;
+    int32 type = 4;                 
+    int32 status = 5;               
+    int32 location_sharing = 6;     
+    double latitude = 7;
+    double longitude = 8;
+    int32 ttl = 9;
+    string details = 10;
+    int64 timestamp = 11;
+    int32 visibility = 12;
 }
-````
-````proto
-message Payload {
-    map<string, string> data = 1;
-    repeated Media media = 2;
-}
-````
-````proto
 
+// ---------------- Message ----------------
 message Message {
     string id = 1;
-    string from = 2;
-    string to = 3;
+    Identity from = 2;
+    Identity to = 3;
     string type = 4;
     int64 timestamp = 5;
     Payload payload = 6;
     Ack ack = 7;
     Metadata metadata = 8;
 }
-````
 
-````proto
-message Awareness {
+// ---------------- PushNotification ----------------
+message PushNotification {
     string id = 1;
     Identity from = 2;
     Identity to = 3;
-    int32 type = 4;
-    int32 status = 5;
+    string type = 4;
+    int64 timestamp = 5;
+    Payload payload = 6;
+    Ack ack = 7;
+    Metadata metadata = 8;
+}
+
+// ---------------- ErrorMessage ----------------
+message ErrorMessage {
+    int32 code = 1;           // e.g., 400=Bad Request, 401=Unauthorized
+    int32 error_origin = 2;   // e.g., 1=CLIENT, 2=SERVER, 3=NETWORK
+    string details = 3;       // Human-readable description
+    int64 timestamp = 4;      // Error occurrence timestamp
+}
+
+// ---------------- PingPong ----------------
+message PingPong {
+    string id = 1;
+    Identity from = 2;
+    int32 type = 3;           // 1=PING, 2=PONG
+    int64 timestamp = 4;
+    string details = 5;
+}
+
+// ---------------- Contact ----------------
+message Contact {
+    Identity from = 1;
+    Identity to = 2;
+    string tracking_id = 3;
+    int32 relationship = 4;
+    int32 action = 5;
     int64 timestamp = 6;
+    string details = 7;
+}
+
+// ---------------- AwarenessVisibility ----------------
+message AwarenessVisibility {
+    string id = 1;
+    Identity from = 2;
+    int32 type = 3;
+    int64 timestamp = 4;
+    string details = 5;
+}
+
+// ---------------- TokenAuthority ----------------
+message TokenAuthority {
+    Identity to = 1;
+    string token = 2;
+    int32 type = 3;        // 1=REFRESH, 2=VALIDATE, 3=REVOKE
+    int32 task = 4;        // Specific action to perform
+    int64 timestamp = 5;
+    string details = 6;
+}
+
+// ---------------- LocationStream ----------------
+message LocationStream {
+    string id = 1;
+    Identity from = 2;
+    Identity to = 3;
+    double latitude = 4;
+    double longitude = 5;
+    optional double altitude = 6;
+    int64 timestamp = 7;
+}
+
+// ---------------- Logout ----------------
+message Logout {
+    Identity to = 1;
+    int32 type = 2;         // 1=DEVICE, 2=SESSION, 3=ACCOUNT
+    int32 status = 3;       // 0=INITIATED, 1=SUCCESS, 2=FAILED
+    int64 timestamp = 4;
+    string details = 5;
+}
+
+// ---------------- Body ----------------
+message Body {
+    int64 route = 1;
+    repeated Awareness awareness_list = 2;
+    int64 timestamp = 3;
+}
+
+// ---------------- MessageScheme ----------------
+message MessageScheme {
+    int64 route = 1;
+
+    oneof payload {
+        Awareness awareness = 2;
+        PingPong ping_pong = 3;
+        AwarenessVisibility awareness_visibility = 4;
+        TokenAuthority token_authority = 5;
+        Message chat_message = 6;
+        PushNotification push_notification = 7;
+        LocationStream location_stream = 8;
+        Body body = 9;
+        ErrorMessage error = 10;
+        Logout logout = 11;
+        Signal signal = 12;
+    }
 }
 ````
 
