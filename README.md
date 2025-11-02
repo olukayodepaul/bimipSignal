@@ -128,15 +128,25 @@ message Awareness {
 
 ## 🧱 Protocol Index
 
-| **Message Type** | **Purpose**                                                                  |
-| ---------------- | ---------------------------------------------------------------------------- |
-| `Identity`       | Defines user and device identity within a cluster.                           |
-| `Signal`         | Handles transient actions like typing, recording, or delivery notifications. |
-| `Awareness`      | Communicates real-time presence and activity.                                |
-| `Message`        | Represents chat or system notifications.                                     |
-| `TokenAuthority` | Manages token refresh, revocation, or validation.                            |
-| `Logout`         | Performs device or session logout.                                           |
-| `ErrorMessage`   | Provides structured error responses.                                         |
+| **Message Type**          | **Purpose**                                                                                                     |
+|----------------------------|-----------------------------------------------------------------------------------------------------------------|
+| `Identity`                | Defines user and device identity within a cluster, including node association and session context.              |
+| `Media`                   | Describes attached media (image, video, audio, or file) with optional thumbnail and metadata.                   |
+| `Signal`                  | Handles transient events like typing, recording, forwarded, delivered, read, and resume notifications.          |
+| `Payload`                 | Encapsulates message data and key-value attributes, including optional media attachments.                       |
+| `Metadata`                | Provides encryption and signature fields for message integrity and confidentiality.                             |
+| `Ack`                     | Tracks acknowledgment states (SENT, DELIVERED, READ, FORWARDED, PLAYED) for reliable delivery.                  |
+| `Awareness`               | Communicates real-time presence, device activity, and location sharing with TTL-based expiration.               |
+| `Message`                 | Represents chat messages or notifications with payload, metadata, and acknowledgment tracking.                  |
+| `ErrorMessage`            | Defines structured error responses with standardized codes and contextual details.                              |
+| `PingPong`                | Maintains connection heartbeat between client and server (PING ↔ PONG).                                         |
+| `Contact`                 | Manages contact relationships and subscription actions (add, remove, accept, deny, etc.).                       |
+| `AwarenessVisibility`     | Toggles and synchronizes user awareness visibility state (ENABLED, DISABLED, or ERROR).                         |
+| `TokenAuthority`          | Manages token operations such as REQUEST, RESULT, REFRESH, or REVOKE between nodes or clients.                  |
+| `Logout`                  | Performs device or session logout with status reporting (SUCCESS, FAIL, PENDING).                              |
+| `Body`                    | Container for batching multiple stanzas (currently supports Awareness lists).                                   |
+| `MessageScheme`           | Unified wrapper for all stanza types, ensuring only one payload type per transport message.                     |
+
 
 ---
 
