@@ -66,18 +66,18 @@ package bimip;
 ````
 ````proto
 message Identity {
-    string eid = 1;                              // User’s global identifier (e.g., account ID or JID)
-    optional string connection_resource_id = 2;  // Identifier for a specific device or session instance
-    string node = 3;                             // System node handling this entity (cluster context)
+    string eid = 1;    
+    optional string connection_resource_id = 2; 
+    string node = 3;
 }
 ````
 
 ````proto
 message Media {
-    string type = 1;        // "image" | "video" | "audio" | "file"
-    string url = 2;         // URL of the media
-    string thumbnail = 3;   // Thumbnail URL (optional)
-    int64 size = 4;         // Size in bytes
+    string type = 1;  
+    string url = 2; 
+    string thumbnail = 3;
+    int64 size = 4;  
 }
 ````
 ````proto
@@ -85,14 +85,13 @@ message Signal {
     string id = 1;
     Identity from = 2;
     Identity to = 3;
-    int32 type = 4;       // 1=REQUEST, 2=RESPONSE, 3=ERROR
-    int32 status = 5;     // 6=TYPING, 7=RECORDING, 8=FORWARDED, etc.
+    int32 type = 4;
+    int32 status = 5;
     int64 timestamp = 6;
     int64 monotonic_id = 7;
 }
 ````
 ````proto
-// ---------------- Payload ----------------
 message Payload {
     map<string, string> data = 1;
     repeated Media media = 2;
