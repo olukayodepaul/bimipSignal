@@ -1,11 +1,18 @@
 
 # 🛰️ BIMIP — Binary Interface for Messaging and Internet Protocol
 
-**BIMIP** is a scalable real-time communication protocol built for developers who need reliable, low-latency connectivity across devices, users, and systems.
+**BIMIP** is a scalable real-time communication protocol built for developers who need reliable, low-latency connectivity across devices, users, and distributed systems.
 
-It is designed for **massive-scale chat**, **awareness**, **streaming**, and **real-time collaboration** applications.  
-BIMIP combines **binary efficiency** with **distributed architecture** powered by the BEAM (Erlang/Elixir).
+It is designed for massive-scale chat, presence awareness, media streaming, and real-time collaboration.
+BIMIP combines binary efficiency with a distributed architecture powered by the BEAM (Erlang/Elixir) runtime.
 
+At its core, BIMIP is composed of two main services:
+
+BimipSignal — handles client connections, signaling, and message serialization/deserialization.
+
+BimipServer — serves as the authoritative backend where contact lists are managed (add, delete, block), tokens are signed, and inter-device coordination is enforced.
+
+Together, they form a robust communication layer that ensures high performance, reliability, and extensibility across multiple devices and sessions.
 ---
 
 ## 🚀 Vision
