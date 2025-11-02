@@ -297,8 +297,8 @@ Released under the [MIT License](./LICENSE)
 
 ## 👨‍💻 Author
 
-**Paul Aigokhai Olukayode**
-Full Stack Software Engineer • Architect of BIMIP
+**Bimip Foundation**
 📧 [paul.olukayode.pro@gmail.com](mailto:paul.olukayode.pro@gmail.com)
-🌐 [GitHub](https://github.com/olukayodepaul) • [LinkedIn](https://linkedin.com/in/paulaigbokhaiolukayode)
+🌐 [GitHub](https://github.com/olukayodepaul) 
+• [LinkedIn](https://linkedin.com/in/paulaigbokhaiolukayode)
 
