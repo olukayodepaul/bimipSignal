@@ -38,10 +38,8 @@ Together, they form a **robust, distributed communication layer** that ensures:
 
 * **Binary Protocol** — Compact, efficient payloads optimized for low-latency communication
 * **Device Awareness** — Real-time, multi-device presence tracking
-* **Scalable Routing** — High-performance routing using ETS and GenServers
+* **Scalable Routing** — High-performance routing using elixir OTP
 * **Cluster-Ready Architecture** — Supports node interconnection via RPC or gRPC for distributed scalability
-* **Extensible Message Schema** — Flexible structure for offers, ICE candidates, and custom event types
-
 ---
 
 ## 📜 Protocol Specification
