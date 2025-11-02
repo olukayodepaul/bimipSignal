@@ -23,8 +23,10 @@ BIMIP (Binary Interface for Messaging and Internet Protocol) provides an open fr
 | **BimipServer** | Core router managing sessions, routing, and awareness events |
 | **BimipSignal** | Handles **BimipClient** connections, signaling, and message serialization/deserialization |
 | **Orchestrator** | Epokhai session mannager (ESM) Manages and cordinate device communication |
-| **Registry** | Tracks connected JIDs and device IDs using ETS |
-| **Storage** | Persists message logs, acknowledgments, and device state |
+| **Registry** | racks connected EIDs and device IDs across clusters using the BIMIP Internal Presence Protocol (BIPP). |
+| **Storage** | The BimipQueue is a high-performance, file-backed log system responsible for persisting messages, acknowledgments, and device states.
+Built on advanced principles of sparse indexing, write-ahead logging, and segmented file design, it supports fast append operations, offline data persistence, and efficient purging of old segments.
+This design ensures scalability for millions of messages while maintaining low latency and minimal disk I/O. |
 
 ---
 
