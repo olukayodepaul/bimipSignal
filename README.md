@@ -81,41 +81,8 @@ message Identity {
     string node = 3;                             // Node handling this entity (cluster context)
 }
 
-// ---------------- Media ----------------
-message Media {
-    string type = 1;        // "image" | "video" | "audio" | "file"
-    string url = 2;         // Media URL
-    string thumbnail = 3;   // Optional thumbnail
-    int64 size = 4;         // Size in bytes
-}
 
-// ---------------- Signal ----------------
-message Signal {
-    string id = 1;
-    Identity from = 2;
-    Identity to = 3;
-    int32 type = 4;         // 1=REQUEST, 2=RESPONSE, 3=ERROR
-    int32 status = 5;       // 1=TYPING, 2=RECORDING, 3=FORWARDED, 4=DELIVERED, 5=READ, 6=RESUME
-    int64 timestamp = 6;
-    int64 monotonic_id = 7; // Derived from message queue sequence
-}
 
-// ---------------- Payload ----------------
-message Payload {
-    map<string, string> data = 1;   // Dynamic key-value data
-    repeated Media media = 2;       // Optional media attachments
-}
-
-// ---------------- Metadata ----------------
-message Metadata {
-    string encrypted = 1;   // Base64 encrypted content
-    string signature = 2;   // Base64 signature for integrity
-}
-
-// ---------------- Ack ----------------
-message Ack {
-    repeated int32 status = 1;  // 9=DELIVERED, 10=READ, 11=FORWARDED, 12=SENT, 13=PLAYED
-}
 
 // ---------------- Awareness ----------------
 message Awareness {
@@ -133,16 +100,35 @@ message Awareness {
     int32 visibility = 12;
 }
 
-// ---------------- Message ----------------
 message Message {
-    string id = 1;
-    Identity from = 2;
-    Identity to = 3;
-    string type = 4;
-    int64 timestamp = 5;
-    Payload payload = 6;
-    Ack ack = 7;
-    Metadata metadata = 8;
+    string id = 1;                    // client/queue-generated message ID
+    string signal_id = 2;             // server-assigned global ID (monotonic or unique)
+    Identity from = 3;                  // sender (JID or user ID)
+    Identity to = 4;                    // recipient (JID or user ID)
+    string type = 5;                  // "chat" | "notification"
+    int64 timestamp = 6;              // epoch milliseconds
+    string content = 7;               // main textual content of the message
+    bytes payload = 8;                // pass json { }
+    string encryption_type = 9;       // "none", "AES256", "E2E", etc.
+    string encrypted = 10;            // base64 encrypted content (if any)
+    string signature = 11;            // base64 signature for integrity
+    int64 status = 12;  // 1=DELIVERED, 2=READ, 3=FORWARDED, 4=SENT, 5=PLAYED/VIEWED, 
+                     // 6=TYPING, 7=RECORDING, 8=PAUSED, 9=CANCELLED
+}
+
+// ---------------- Ack ----------------
+// Used by both client and server to reconcile message status.
+// Supports dual reference (id + signal_id) for precise synchronization.
+message Signal {
+    string id = 1;                // client/queue message ID
+    string signal_id = 2;         // server-assigned global message ID
+    int32 status = 3;             // 1=DELIVERED, 2=READ, 3=FORWARDED, 4=SENT, 5=PLAYED/VIEWED, 
+                                  // 6=TYPING, 7=RECORDING, 8=PAUSED, 9=CANCELLED
+    int64 timestamp = 4;          // epoch ms
+    Identity from = 5;            // who sent the ACK
+    Identity to = 6;              // who receives the ACK
+    int32 type = 7;               // 1=REQUEST, 2=RESPONSE, 3=ERROR
+    optional string error = 8;    // optional error message if type=3
 }
 
 // ---------------- PushNotification ----------------
