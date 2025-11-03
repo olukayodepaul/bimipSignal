@@ -136,7 +136,7 @@ message PushNotification {
     Identity to = 3;
     string type = 4;
     int64 timestamp = 5;
-    Payload payload = 6;
+     bytes payload = 8;                // pass json { }
     Ack ack = 7;
     Metadata metadata = 8;
 }
