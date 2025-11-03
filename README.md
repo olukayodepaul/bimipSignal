@@ -82,8 +82,6 @@ message Identity {
 }
 
 
-
-
 // ---------------- Awareness ----------------
 message Awareness {
     string id = 1;
@@ -116,7 +114,7 @@ message Message {
                      // 6=TYPING, 7=RECORDING, 8=PAUSED, 9=CANCELLED
 }
 
-// ---------------- Ack ----------------
+// ---------------- Signal ----------------
 // Used by both client and server to reconcile message status.
 // Supports dual reference (id + signal_id) for precise synchronization.
 message Signal {
