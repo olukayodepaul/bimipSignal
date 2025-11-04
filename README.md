@@ -99,35 +99,37 @@ message Awareness {
 }
 
 message Message {
-    string id = 1;                    // client/queue-generated message ID
-    string signal_id = 2;             // server-assigned global ID (monotonic or unique)
-    Identity from = 3;                  // sender (JID or user ID)
-    Identity to = 4;                    // recipient (JID or user ID)
-    string type = 5;                  // "chat" | "notification"
-    int64 timestamp = 6;              // epoch milliseconds
-    string content = 7;               // main textual content of the message
-    bytes payload = 8;                // pass json { }
-    string encryption_type = 9;       // "none", "AES256", "E2E", etc.
-    string encrypted = 10;            // base64 encrypted content (if any)
-    string signature = 11;            // base64 signature for integrity
-    int64 status = 12;  // 1=DELIVERED, 2=READ, 3=FORWARDED, 4=SENT, 5=PLAYED/VIEWED, 
-                     // 6=TYPING, 7=RECORDING, 8=PAUSED, 9=CANCELLED
+  string id = 1;              // client/queue-generated message ID
+  string signal_offset = 2;   // server-assigned global ID (monotonic or unique)
+  string user_offset = 3;     // server-assigned global ID (monotonic or unique)
+  Identity from = 4;          // sender (JID or user ID)
+  Identity to = 5;            // recipient (JID or user ID)
+  int32 type = 6;             // 1 = Chat | 2 = PushNotification
+  int64 timestamp = 7;        // epoch milliseconds
+  bytes payload = 8;          // pass JSON { }
+  string encryption_type = 9; // "none", "AES256", "E2E", etc.
+  string encrypted = 10;       // base64 encrypted content (if any)
+  string signature = 11;      // base64 signature for integrity
+  int32 status = 12;          // 1=SENT, 2=RECORDING, 3=DELIVERED, 4=READ, 5=FORWARDED, 6=PLAYED/VIEWED,
+                              // 7=TYPING, 8=RECORDING, 9=PAUSED, 10=CANCELLED, 11=RESUME,
+                              // 12=CALLING, 13=DECLINE
 }
 
 // ---------------- Signal ----------------
 // Used by both client and server to reconcile message status.
 // Supports dual reference (id + signal_id) for precise synchronization.
 message Signal {
-    string id = 1;                // client/queue message ID
-    string signal_id = 2;         // server-assigned global message ID
-    int32 status = 3;             // 1=DELIVERED, 2=READ, 3=FORWARDED, 4=SENT, 5=PLAYED/VIEWED, 
-                                  // 6=TYPING, 7=RECORDING, 8=PAUSED, 9=CANCELLED
-    int64 timestamp = 4;          // epoch ms
-    Identity from = 5;            // who sent the ACK
-    Identity to = 6;              // who receives the ACK
-    int32 type = 7;               // 1=REQUEST, 2=RESPONSE, 3=ERROR
-    optional string error = 8;    // optional error message if type=3
+  string id = 1;            // client/queue message ID
+  string signal_offset = 2; // server-assigned global ID (monotonic or unique)
+  string user_offset = 3;   // server-assigned global ID (monotonic or unique)
+  int32 status = 4;         // 1=SENT, 2=RECORDING, 3=DELIVERED, 4=READ, 5=FORWARDED, 6=PLAYED/VIEWED, 7=TYPING, 8=RECORDING, 9=PAUSED, 10=CANCELLED, 11=RESUME
+  int64 timestamp = 5;      // epoch ms
+  Identity from = 6;        // who sent the ACK
+  Identity to = 7;          // who receives the ACK
+  int32 type = 8;           // 1=REQUEST, 2=RESPONSE, 3=ERROR
+  optional string error = 9;// optional error message if type=3
 }
+
 
 // ---------------- PushNotification ----------------
 message PushNotification {
