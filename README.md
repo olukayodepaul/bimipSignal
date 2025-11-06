@@ -98,6 +98,11 @@ message Awareness {
     int32 visibility = 12;
 }
 
+// ---------------- Message ----------------
+// Represents a chat or notification message between users.
+// Message-level ACKs are tracked via the status field.
+// Awareness (TYPING, RECORDING) is per-user and handled separately.
+// This is sent once.
 message Message {
   string id = 1;              // client/queue-generated message ID
   string signal_offset = 2;   // server-assigned global ID (monotonic or unique)
@@ -113,6 +118,7 @@ message Message {
   int32 status = 12;          // 1=SENT, 2=RECORDING, 3=DELIVERED, 4=READ, 5=FORWARDED, 6=PLAYED/VIEWED,
                               // 7=TYPING, 8=RECORDING, 9=PAUSED, 10=CANCELLED, 11=RESUME,
                               // 12=CALLING, 13=DECLINE
+  signal_type = 13;           // 1=ONE-WAT, 2=TWO-WAY
 }
 
 // ---------------- Signal ----------------
@@ -127,7 +133,8 @@ message Signal {
   Identity from = 6;        // who sent the ACK
   Identity to = 7;          // who receives the ACK
   int32 type = 8;           // 1=REQUEST, 2=RESPONSE, 3=ERROR
-  optional string error = 9;// optional error message if type=3
+  signal_type = 9;           // 1=ONE-WAT, 2=TWO-WAY
+  optional string error = 10;// optional error message if type=3
 }
 
 
